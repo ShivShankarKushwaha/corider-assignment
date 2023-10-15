@@ -1,0 +1,47 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+.conemessage
+{
+    border-right: 15px solid white;
+    border-left: 15px solid white;
+    border-top: 15px solid rgb(5, 228, 5);
+    border-bottom: 0px solid transparent;
+}
+/* Global CSS file or CSS module file */
+@keyframes loading {
+  0%, 100% {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+  }
+  50% {
+    background-position: -200% 0;
+  }
+}
+
+.message {
+  display: flex;
+  margin-bottom: 10px;
+  animation: loading 1.5s infinite;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #ccc;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.message-content {
+  flex: 1;
+  height: 40px;
+  animation: loading 1.5s infinite;
+}
+.backgroundset
+{
+  background-color: rgb(247, 248, 244);
+  background-attachment: fixed;
+}
