@@ -1,13 +1,27 @@
 const CACHE_NAME = "version-1";
-const urltoCache = ["index.html", "offline.html", './src/App.js', './src/App.jsx', './src/App.ts', './src/App.tsx', 'https://qa.corider.in/assignment/chat?page=1'];
+const urltoCache = ["../","./","./index.html", "./offline.html", './src/App.js', '../src/App.jsx', '../src/App.ts', '../src/App.tsx', 'https://qa.corider.in/assignment/chat?page=1'];
 this.addEventListener("install", (e) =>
 {
     console.log('installing');
     e.waitUntil(
-        caches.open(CACHE_NAME).then((cache) =>
+        caches.open(CACHE_NAME).then(async(cache) =>
         {
             console.log("caches opened");
-            return cache.addAll(urltoCache);
+            // return await cache.addAll(urltoCache);
+            try {
+                ok = await cache.addAll(urltoCache);
+            } catch (err) {
+                console.error('sw: cache.addAll');
+                for (let i of urltoCache) {
+                    try {
+                        ok = await cache.add(i);
+                    } catch (err) {
+                        console.warn('sw: cache.add', i);
+                    }
+                }
+            }
+
+            return ok;
         }),
     );
 });
@@ -36,7 +50,7 @@ this.addEventListener("fetch", (e) =>
 
                     return response;
                 })
-                .catch(() => caches.match("offline.html")); 
+                .catch(() => caches.match("./offline.html")); 
         }),
     );
 });
