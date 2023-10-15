@@ -22,43 +22,51 @@ function App()
       });
     }, 50);
   }
-  useEffect(() =>
-  {
-    console.log('inside useeffect',page);
-    if (page !== 1) {
-      fetch('https://qa.corider.in/assignment/chat?page=' + page)
-        .then(response => response.json())
-        .then(result =>
-        {
-          // Add new chats to the existing chats array
-          setalldata(prevData =>
-          {
-            // setpage(page+1);
-            return {
+  useEffect(() => {
+    const fetchChatMessages = async (page:number) => {
+      try {
+        const response = await fetch(`https://qa.corider.in/assignment/chat?page=${page}`);
+        if (response.ok) {
+          const result = await response.json();
+
+          // Update the state with the fetched chat messages
+          if (page === 1) {
+            setalldata(result);
+          } else {
+            setalldata((prevData) => ({
               ...prevData,
               chats: result.chats.concat(prevData.chats),
-            };
-          });
-          console.log('chats are', result);
-        })
-        .catch(err =>
-        {
+            }));
+          }
+        } else {
+          // Handle non-200 response status (e.g., show an error message)
+          console.error('Error fetching chat messages:', response.status);
+        }
+      } catch (error) {
+        // Handle network errors or request failures
+        console.error('Network error:', error);
+
+        // Check for cached chat messages when the network request fails
+        const cachedResponse = await caches.match(`https://qa.corider.in/assignment/chat?page=1`);
+        if (cachedResponse) {
+          const result = await cachedResponse.json();
+
+          // Update the state with cached chat messages
+          setalldata((prevData) => ({
+            ...prevData,
+            chats: result.chats.concat(prevData.chats),
+          }));
+        } else {
+          // Handle the case when both the network request and cache retrieval fail
           alert('Error while loading the chat');
-        });
-    } else 
-    {
-      fetch('https://qa.corider.in/assignment/chat?page=' + page)
-        .then(response => response.json())
-        .then(result =>
-        {
-          setalldata(result);
-          setpageload(!pageload);
-          console.log('chats are', result);
-        })
-        .catch(err =>
-        {
-          alert('Error while loading the chat');
-        });
+        }
+      }
+    };
+
+    if (page !== 1) {
+      fetchChatMessages(page);
+    } else {
+      fetchChatMessages(1);
     }
   }, [page]);
 

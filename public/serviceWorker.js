@@ -1,7 +1,8 @@
 const CACHE_NAME = "version-1";
-const urltoCache = ["index.html", "offline.html", './src/App.js', './src/App.jsx', './src/App.ts', './src/App.tsx'];
+const urltoCache = ["index.html", "offline.html", './src/App.js', './src/App.jsx', './src/App.ts', './src/App.tsx', 'https://qa.corider.in/assignment/chat?page=1'];
 this.addEventListener("install", (e) =>
 {
+    console.log('installing');
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) =>
         {
@@ -12,11 +13,12 @@ this.addEventListener("install", (e) =>
 });
 this.addEventListener("fetch", (e) =>
 {
+    console.log('fetching');
     e.respondWith(
         caches.match(e.request).then((res) =>
         {
             if (res) {
-                return res; // Return the cached resource if it exists
+                return res; 
             }
             return fetch(e.request)
                 .then((response) =>
@@ -29,18 +31,19 @@ this.addEventListener("fetch", (e) =>
 
                     caches.open(CACHE_NAME).then((cache) =>
                     {
-                        cache.put(e.request, responseToCache); // Cache the fetched response
+                        cache.put(e.request, responseToCache); 
                     });
 
                     return response;
                 })
-                .catch(() => caches.match("offline.html")); // Return the offline page if the network request fails
+                .catch(() => caches.match("offline.html")); 
         }),
     );
 });
 
 this.addEventListener("activate", (e) =>
 {
+    console.log('activating');
     const cacheWhiteList = [];
     cacheWhiteList.push(CACHE_NAME);
     e.waitUntil(
