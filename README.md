@@ -1,6 +1,6 @@
 # Deployed link [link](https://verdant-pastelito-b0bc75.netlify.app/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://corider-chat-assignment.netlify.app/).
 
 ## Available Scripts
 
